@@ -1,0 +1,69 @@
+                LLC (Logical Link Control - Mantıksal Bağlantı Kontrolü)
+
+OSI modelinin 2. katmanı olan Veri Bağlantı Katmanı ikiye ayrılır: MAC (donanım odaklı) ve LLC (yazılım/protokol odaklı).
+
+Görevi: Farklı ağ protokollerinin (IP, IPX vb.) aynı fiziksel hat üzerinden taşınmasını sağlar.
+
+Benzetme: Bir postanedeki paketleme birimi gibidir; içeriğin ne olduğuna bakmaksızın onu uygun bir zarfa koyar.
+
+
+
+
+
+                SAP (Service Access Point - Servis Erişim Noktası)
+
+DSAP ve SSAP terimlerindeki "SAP", verinin hangi üst katman protokolüne (örneğin ağ katmanındaki bir protokole) teslim edileceğini belirten bir kapı numarası gibidir.
+
+DSAP (Destination Service Access Point): * Hedef Servis Erişim Noktası.
+
+Paket karşı bilgisayara ulaştığında, bu paketin hangi protokole (örneğin IPX veya NetBIOS) teslim edileceğini söyler.
+
+SSAP (Source Service Access Point): * Kaynak Servis Erişim Noktası.
+
+Paketin hangi protokol tarafından oluşturulduğunu belirtir.
+
+Not: Hem DSAP hem de SSAP 8 bit (1 byte) uzunluğundadır.
+
+
+
+
+
+		Neden Kullanılırlar? (Multiplexing)
+
+Aynı ağ kablosu üzerinden hem internet verisi (IP) hem de eski tip bir yazıcı verisi akıyor olabilir. Bilgisayarın bu verileri birbirinden ayırması gerekir:
+
+Ethernet II çerçevelerinde bu işi EtherType alanı yapar.
+
+IEEE 802.3 standartlarında ise bu işi LLC (DSAP/SSAP) ikilisi üstlenir.
+
+
+
+
+
+		Python ile LLC/SAP Paket Yapılandırması
+
+from scapy.all import Ether, LLC, raw
+
+def paket_olustur():
+    # 1. Katman: Ethernet (MAC Adresleri)
+    # LLC kullanıldığında tip alanı yerine uzunluk alanı gelir
+    eth = Ether(dst="ff:ff:ff:ff:ff:ff", src="00:11:22:33:44:55")
+
+    # 2. Katman: LLC (Logical Link Control)
+    # Burada DSAP ve SSAP değerlerini belirliyoruz
+    # Örnek: 0x42 değeri STP (Spanning Tree Protocol) için kullanılır
+    llc_katmani = LLC(dsap=0x42, ssap=0x42, ctrl=3)
+
+    # Paketleri birleştiriyoruz
+    tam_paket = eth / llc_katmani / "Merhaba, bu bir LLC verisidir!"
+
+    print("--- Oluşturulan Paket Özeti ---")
+    tam_paket.show()
+
+    # Paketin ham (hex) halini görelim
+    print("\n--- Paketin Hex (Onatlık) Görünümü ---")
+    print(raw(tam_paket).hex())
+
+if __name__ == "__main__":
+    paket_olustur()
+
