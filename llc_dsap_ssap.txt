@@ -28,7 +28,7 @@ Not: Hem DSAP hem de SSAP 8 bit (1 byte) uzunluğundadır.
 
 
 
-		Neden Kullanılırlar? (Multiplexing)
+				Neden Kullanılırlar? (Multiplexing)
 
 Aynı ağ kablosu üzerinden hem internet verisi (IP) hem de eski tip bir yazıcı verisi akıyor olabilir. Bilgisayarın bu verileri birbirinden ayırması gerekir:
 
@@ -40,7 +40,7 @@ IEEE 802.3 standartlarında ise bu işi LLC (DSAP/SSAP) ikilisi üstlenir.
 
 
 
-		Python ile LLC/SAP Paket Yapılandırması
+				Python ile LLC/SAP Paket Yapılandırması
 
 from scapy.all import Ether, LLC, raw
 
@@ -66,4 +66,5 @@ def paket_olustur():
 
 if __name__ == "__main__":
     paket_olustur()
+
 
